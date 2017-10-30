@@ -1,6 +1,11 @@
 ---
 project_name: "neutron"
 
+lib_project_name: "neutron-lib"
+lbaas_project_name: "neutron-lbaas"
+vpnaas_project_name: "neutron-vpnaas"
+dragent_project_name: "neutron-dynamic-routing"
+
 neutron_services:
   neutron-server:
     container_name: "neutron_server"
@@ -11,6 +16,8 @@ neutron_services:
     volumes:
       - "{{ node_config_directory }}/neutron-server/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron/neutron:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-openvswitch-agent:
     container_name: "neutron_openvswitch_agent"
@@ -39,6 +46,8 @@ neutron_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/lib/modules:/lib/modules:ro"
       - "/run:/run:shared"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron/neutron:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-linuxbridge-agent:
     container_name: "neutron_linuxbridge_agent"
@@ -63,6 +72,8 @@ neutron_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/lib/modules:/lib/modules:ro"
       - "/run:/run:shared"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron/neutron:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-dhcp-agent:
     container_name: "neutron_dhcp_agent"
@@ -75,7 +86,9 @@ neutron_services:
       - "{{ node_config_directory }}/neutron-dhcp-agent/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/run/:/run/:shared"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
       - "neutron_metadata_socket:/var/lib/neutron/kolla/"
+      - "{{ kolla_dev_repos_directory ~ '/neutron/neutron:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-l3-agent:
     container_name: "neutron_l3_agent"
@@ -93,6 +106,8 @@ neutron_services:
       - "/lib/modules:/lib/modules:ro"
       - "/run:/run:shared"
       - "neutron_metadata_socket:/var/lib/neutron/kolla/"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron/neutron:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-lbaas-agent:
     container_name: "neutron_lbaas_agent"
@@ -105,6 +120,8 @@ neutron_services:
       - "{{ node_config_directory }}/neutron-lbaas-agent/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lbaas/neutron_lbaas:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lbaas' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-metadata-agent:
     container_name: "neutron_metadata_agent"
@@ -121,6 +138,8 @@ neutron_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run/:/run/:shared"
       - "neutron_metadata_socket:/var/lib/neutron/kolla/"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron/neutron:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-vpnaas-agent:
     container_name: "neutron_vpnaas_agent"
@@ -134,6 +153,8 @@ neutron_services:
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
       - "/lib/modules:/lib/modules:ro"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-vpnaas/neutron_vpnaas:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_vpnaas' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
   neutron-bgp-dragent:
     container_name: "neutron_bgp_dragent"
@@ -146,6 +167,9 @@ neutron_services:
       - "{{ node_config_directory }}/neutron-bgp-dragent/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
       - "/run:/run:shared"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-lib/neutron_lib:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_lib' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron/neutron:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron' if neutron_dev_mode | bool else '' }}"
+      - "{{ kolla_dev_repos_directory ~ '/neutron-dynamic-routing/neutron_dynamic_routing:/var/lib/kolla/venv/lib/python2.7/site-packages/neutron_dynamic_routing' if neutron_dev_mode | bool else '' }}"
       - "kolla_logs:/var/log/kolla/"
 
 
@@ -216,6 +240,17 @@ neutron_public_endpoint: "{{ public_protocol }}://{{ kolla_external_fqdn }}:{{ n
 neutron_logging_debug: "{{ openstack_logging_debug }}"
 
 openstack_neutron_auth: "{{ openstack_auth }}"
+
+####################
+# Kolla
+####################
+neutron_lib_git_repository: "{{ kolla_dev_repos_git }}/{{ lib_project_name }}"
+neutron_git_repository: "{{ kolla_dev_repos_git }}/{{ project_name }}"
+neutron_lbaas_git_repository: "{{ kolla_dev_repos_git }}/{{ lbaas_project_name }}"
+neutron_vpnaas_git_repository: "{{ kolla_dev_repos_git }}/{{ vpnaas_project_name }}"
+neutron_dragent_git_repository: "{{ kolla_dev_repos_git }}/{{ dragent_project_name }}"
+neutron_dev_repos_pull: "{{ kolla_dev_repos_pull }}"
+neutron_dev_mode: "{{ kolla_dev_mode }}"
 
 ####################
 # Extension drivers
